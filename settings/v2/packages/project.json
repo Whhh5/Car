@@ -1,0 +1,25 @@
+{
+  "layer": [
+    {
+      "name": "Player",
+      "value": 1
+    },
+    {
+      "name": "Enemy",
+      "value": 2
+    },
+    {
+      "name": "Ground",
+      "value": 4
+    },
+    {
+      "name": "Skill",
+      "value": 8
+    }
+  ],
+  "general": {
+    "designResolution": {
+      "fitHeight": true
+    }
+  }
+}
