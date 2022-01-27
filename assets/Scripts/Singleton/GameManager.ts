@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Node, Vec3, RigidBody, ConstantForce, BoxCollider2D} from 'cc';
+import { IBlood } from '../Interface/Interface';
 import { KeyInputControler } from '../Tools/KeyInputControler';
 import { executeDelegate, IDelegate_Void_Void } from '../Tools/TypeEnumAndDelegete';
 const { ccclass, property } = _decorator;
@@ -17,10 +18,7 @@ const { ccclass, property } = _decorator;
  */
  
 @ccclass("GameManager") 
-export class GameManager extends Component{
-    reduceEnemyBlood(reduceEnemyBlood: any, arg1: {}) {
-        throw new Error('Method not implemented.');
-    }
+export class GameManager extends Component implements IBlood{
     static _instance:GameManager = null;   
     onLoad(){
         GameManager._instance = this;
@@ -36,7 +34,7 @@ export class GameManager extends Component{
     
     //车辆
     @property({group:{name:"MainCar",id:"1",displayOrder:1},range:[0,1000],slide:true,visible:true})
-    _bloodVolume:number = 0;
+    private _bloodVolume:number = 0;
     @property({group:{name:"MainCar",id:"1",displayOrder:1},range:[0,1000],slide:true,visible:true})
     _maxBloodVolume:number = 0;
     @property({group:{name:"MainCar",id:"1",displayOrder:1},type:Node,visible:true})
@@ -52,6 +50,22 @@ export class GameManager extends Component{
     @property({group:{name:"MainCar",id:"1",displayOrder:1},type:Node,slide:true,visible:true})
     _cartat:Node;
 
+    
+    get _blood() : number {
+        return this._bloodVolume;
+    }
+    
+    set _blood(value:number){
+        if(value >= this._maxBloodVolume){
+            this._bloodVolume = this._maxBloodVolume;
+        }else if(value <= 0){
+            this._bloodVolume = 0;
+        }else{
+            this._bloodVolume = value;
+        }
+    }
+    
+    
 
     //摄像机
     @property({group:{name:"MainCamera",id:"1"},displayOrder:1, type: Node ,visible:true})
@@ -81,14 +95,23 @@ export class GameManager extends Component{
     @property({group:{name:"其他",id:"2",displayOrder:1},type:Node,visible:true})
     _parent:Node;
 
-    
+
+
+
+
+/*===================================================================================================================================================================*/
+    //enemy减少血量事件
+    reduceEnemyBloodEvent:Array<IDelegate_Void_Void> = [];
+    reduceEnemyBlood(object:IBlood,value:number){
+        GameManager._instance._bloodVolume += value;
+    }
 
     //生命减少玩家血量事件
-    reduceCarBlood:Array<IDelegate_Void_Void> = [];
+    reduceCarBloodEvent:Array<IDelegate_Void_Void> = [];
 
     reduceCarBloodVolume(value:number){
-        GameManager._instance._bloodVolume += value;
-        executeDelegate(GameManager._instance.reduceCarBlood,{});
+        GameManager._instance._blood += value;
+        executeDelegate(GameManager._instance.reduceCarBloodEvent,{});
     }
 }
 
@@ -128,3 +151,4 @@ export class CarContorller extends Component{
         this._constantForce.localForce = new Vec3(0,0, - moveSpeed * del * 1000);
     }
 }
+

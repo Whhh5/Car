@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, ITriggerEvent, Vec3, Collider, input, Input, __private, EventKeyboard, KeyCode, Quat } from 'cc';
+import { _decorator, Component, Node, ITriggerEvent, Vec3, Collider, input, Input, __private, EventKeyboard, KeyCode, Quat, EventTouch, Vec2 } from 'cc';
 import { GameManager } from './Singleton/GameManager';
 const { ccclass, property } = _decorator;
 
@@ -19,6 +19,8 @@ const { ccclass, property } = _decorator;
 export class Test extends Component {
     onLoad(){
         input.on(Input.EventType.KEY_DOWN,this.onKeyDown,this);
+
+        
     }
 
     @property({type:Node,visible:true})
@@ -29,6 +31,7 @@ export class Test extends Component {
         if(event.keyCode == KeyCode.DIGIT_1){
             GameManager._instance.reduceCarBloodVolume(-50);
         }
+
         if(event.keyCode == KeyCode.DIGIT_2){
             let tempTargetRotate = GameManager._instance._mainCar.getRotation(new Quat());
             let dx = this.noden.getWorldPosition(new Vec3()).x - this.node1.getWorldPosition(new Vec3()).x;
@@ -38,11 +41,16 @@ export class Test extends Component {
             temp2 = temp2 / Math.PI * 180;
             console.log(temp2);
         }
+        //减少敌人血量
+        if(event.keyCode == KeyCode.DIGIT_3){
+            GameManager._instance.reduceCarBloodVolume(-50);
+        }
     }
 
     update(del:number){
         this.noden.rotation = Quat.rotationTo(new Quat(),this.noden.rotation,this.node1.rotation);
     }
+    
 }
 
 /**

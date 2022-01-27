@@ -3010,7 +3010,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 0
+      "z": -0.005
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -3116,7 +3116,7 @@
       "__type__": "cc.Vec3",
       "x": -5,
       "y": 0,
-      "z": 0
+      "z": -0.01
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -3288,7 +3288,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Finsh",
+    "_name": "Finish",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -4162,7 +4162,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "烟雾-001",
+    "_name": "火焰",
     "_objFlags": 0,
     "_parent": {
       "__id__": 208
@@ -4267,7 +4267,7 @@
     "duration": 5,
     "loop": true,
     "simulationSpeed": 10,
-    "playOnAwake": true,
+    "playOnAwake": false,
     "gravityModifier": {
       "__id__": 292
     },
@@ -4400,7 +4400,7 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 0,
-    "constant": 10,
+    "constant": 20,
     "multiplier": 1
   },
   {
@@ -5007,7 +5007,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": -50
+      "z": -100
     },
     "_torque": {
       "__type__": "cc.Vec3",
@@ -5070,6 +5070,7 @@
     },
     "_maxBloodVolume": 100,
     "_bloodVolume": 100,
+    "_attackNumber": 100,
     "_id": ""
   },
   {

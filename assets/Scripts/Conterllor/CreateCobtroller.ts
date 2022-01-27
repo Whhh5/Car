@@ -19,7 +19,7 @@ const { ccclass, property } = _decorator;
 @ccclass('CreateCobtroller')
 export class CreateCobtroller extends Component {
     start(){
-        this.enemyCarInitialization(3);
+        this.enemyCarInitialization(GameManager._instance._enemyCreaterCount);
     }
     //敌人车辆生成初始化
     enemyCarInitialization(count:number){
@@ -28,7 +28,7 @@ export class CreateCobtroller extends Component {
                 FactoryPattern._instance.getObj(FactoryPattern._instance._enemyCars,FactoryPattern._instance._enemyCar,GameManager._instance._enemyCreaterPosition[i].worldPosition,GameManager._instance._enemyCreaterPosition[i].worldRotation,GameManager._instance._parent);
                 
             }
-        },2,count,0);
+        },10,count,0);
         // tween(1)
         //     .delay(2)
         //     .to(1,2,{"onStart":()=>{

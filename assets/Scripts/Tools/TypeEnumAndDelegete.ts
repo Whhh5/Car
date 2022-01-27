@@ -1,3 +1,4 @@
+import { IBlood } from "../Interface/Interface";
 
 export enum e_levelStatus{
     stop = 0,//暂停
@@ -32,6 +33,10 @@ export interface IDelegate{
 
 export interface IDelegate_Void_Void{
     ({}):void;
+}
+
+export interface IDelegate_IBlood_Number_Void{
+    ({blood:IBlood,value:number}):void;
 }
 
 export function executeDelegate(arr:Array<Function>,value:{}):void{

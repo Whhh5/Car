@@ -1,5 +1,7 @@
 
 import { _decorator, Component, Node } from 'cc';
+import { changeEnemyBlood, IInitialization } from '../Interface/Interface';
+import { IDelegate_IBlood_Number_Void, IDelegate_Void_Void } from '../Tools/TypeEnumAndDelegete';
 const { ccclass, property } = _decorator;
 
 /**
@@ -15,30 +17,17 @@ const { ccclass, property } = _decorator;
  */
  
 @ccclass('ObserverPattern')
-export class ObserverPattern extends Component {
-    // [1]
-    // dummy = '';
+export class ObserverPattern extends Component implements IInitialization{
+    static _instance:ObserverPattern = null;   
+    onLoad(){
+        ObserverPattern._instance = this;
 
-    // [2]
-    // @property
-    // serializableDummy = 0;
-
-    start () {
-        // [3]
+        //初始化事件添加
+        this.initialization();
     }
-
-    // update (deltaTime: number) {
-    //     // [4]
-    // }
+    initialization(){
+        // this._del_BulletHitEvent.push(changeEnemyBlood);
+    }
+    //子弹击中敌人事件
+    _del_BulletHitEvent:Array<IDelegate_IBlood_Number_Void> = new Array<IDelegate_IBlood_Number_Void>();
 }
-
-/**
- * [1] Class member could be defined like this.
- * [2] Use `property` decorator if your want the member to be serializable.
- * [3] Your initialization goes here.
- * [4] Your update function goes here.
- *
- * Learn more about scripting: https://docs.cocos.com/creator/3.4/manual/zh/scripting/
- * Learn more about CCClass: https://docs.cocos.com/creator/3.4/manual/zh/scripting/ccclass.html
- * Learn more about life-cycle callbacks: https://docs.cocos.com/creator/3.4/manual/zh/scripting/life-cycle-callbacks.html
- */

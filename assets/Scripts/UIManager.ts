@@ -28,7 +28,7 @@ export class UIManager extends Component implements IInitialization{
     @property({type:UITransform,visible:true})
     _carBlood:UITransform;
     @property({visible:true})
-    _maxCarBlood:number;
+    _maxCarBlood:number = 0;
 
     initialization(){
         UIManager._instance._maxCarBlood = UIManager._instance._carBlood.contentSize.width;

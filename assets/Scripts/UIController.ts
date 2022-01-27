@@ -21,19 +21,19 @@ const { ccclass, property } = _decorator;
 export class UIController extends Component {
     _tw1:Tween<UITransform>;
     start () {
-        GameManager._instance.reduceCarBlood.push(this.changeCarBloodVolume);
+        GameManager._instance.reduceCarBloodEvent.push(this.changeCarBloodVolume);
     }
 
     changeCarBloodVolume(){
         tween(UIManager._instance._carBlood)
-            .to(1,{contentSize:new Size(GameManager._instance._bloodVolume/GameManager._instance._maxBloodVolume*UIManager._instance._maxCarBlood,UIManager._instance._carBlood.contentSize.height)})
+            .to(1,{contentSize:new Size(GameManager._instance._blood/GameManager._instance._maxBloodVolume*UIManager._instance._maxCarBlood,UIManager._instance._carBlood.contentSize.height)})
             .union()
             .repeat(1)
             .start()
     }
     changeEnemyCarBloodVolume(){
         tween(UIManager._instance._carBlood)
-            .to(1,{contentSize:new Size(GameManager._instance._bloodVolume/GameManager._instance._maxBloodVolume*UIManager._instance._maxCarBlood,UIManager._instance._carBlood.contentSize.height)})
+            .to(1,{contentSize:new Size(GameManager._instance._blood/GameManager._instance._maxBloodVolume*UIManager._instance._maxCarBlood,UIManager._instance._carBlood.contentSize.height)})
             .union()
             .repeat(1)
             .start()

@@ -1,5 +1,8 @@
 
-import { _decorator, Component, Node, Vec3, tween, Quat, quat, RigidBody, Collider, ICollisionEvent } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Quat, quat, RigidBody, Collider, ICollisionEvent, Layers, ConstantForce, ParticleSystem } from 'cc';
+import { FactoryPattern } from '../FactoryPattern/FactoryPattern';
+import { IAttack, IBlood } from '../Interface/Interface';
+import { ObserverPattern } from '../ObserverPattern/ObserverPattern';
 import { GameManager } from '../Singleton/GameManager';
 const { ccclass, property } = _decorator;
 
@@ -16,17 +19,18 @@ const { ccclass, property } = _decorator;
  */
  
 @ccclass('EnemyController')
-export class EnemyController extends Component {
+export class EnemyController extends Component implements IBlood,IAttack {
     _rb:RigidBody;
 
+    _collider:Collider;
     onLoad(){
         this._rb = this.getComponent(RigidBody);
         this._rb.useCCD;
-        let collider = this.getComponent(Collider);
-        collider.on("onCollisionEnter",(other:ICollisionEvent)=>{
+        this._collider = this.getComponent(Collider);
+        let self = this;
+        this._collider.on("onCollisionEnter",(other:ICollisionEvent)=>{
             if(other.otherCollider.node.layer == 1){
-                GameManager._instance.reduceCarBloodVolume(-GameManager._instance._enemyCarAttack);
-                // console.log(GameManager._instance._bloodVolume);
+                GameManager._instance.reduceCarBloodVolume(-self._attackNumber);
             }
         })
     }
@@ -34,20 +38,48 @@ export class EnemyController extends Component {
     _maxBloodVolume:number = 0;
     @property({group:{name:" ",id:"1",displayOrder:1},range:[0,100],visible:true})
     private _bloodVolume:number = 0;
+    @property({group:{name:" ",id:"1",displayOrder:1},range:[0,100],visible:true})
+    _attackNumber:number = 0;
 
-    get _Blood():number{
+    get _blood():number{
         return this._bloodVolume;
     }
-    set _Blood(value:number){
+    set _blood(value:number){
         if(value >= this._maxBloodVolume){
             this._bloodVolume = this._maxBloodVolume;
         }else if(value <= 0){
             this._bloodVolume = 0;
+            this.finish();
         }else{
             this._bloodVolume = value;
         }
+        this.changeBlood();
+    }
+
+    //减少血量事件
+    changeBlood(){
+        let tempNode:Node = this.node.getChildByName("Blood").getChildByName("Up");
+        tween(tempNode)
+            .delay(0)
+            .to(1,{scale:new Vec3(this._blood/this._maxBloodVolume*1,1,1)})
+            .union()
+            .repeat(1)
+            .start()
     }
     
+    //死亡事件
+    finish(){
+        console.log("死亡");
+        console.log(this.node.getWorldPosition(new Vec3()));
+        this.node.layer = 0;
+        this._rb.sleep();
+        this.isFinsh = true;
+        this._collider.off("onCollisionEnter");
+        this.getComponent(ConstantForce).localForce = new Vec3(0,0,0);
+
+        let tempParticle:ParticleSystem = this.node.getChildByName("Finish").getChildByName("火焰").getComponent(ParticleSystem);
+        tempParticle.play();
+    }
 
     _tempRotate:number = 0;
     start () {
@@ -69,19 +101,12 @@ export class EnemyController extends Component {
         //     .union()
         //     .repeatForever()
         //     .start()
-        this._Blood = 5000;
-        console.log(this._Blood);
-        this._Blood = -100;
-        console.log(this._Blood);
     }
 
+    isFinsh:boolean = false;
     update (deltaTime: number) {
-        if(GameManager._instance._mainCar != null){
+        if(GameManager._instance._mainCar != null && !this.isFinsh){
             this.node.lookAt(GameManager._instance._mainCar.worldPosition);
         }
-    }
-
-    changeBlood(value:number){
-        // console.log(this._bloodVolume +"  "+value);
     }
 }
